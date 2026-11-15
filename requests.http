@@ -1,0 +1,66 @@
+### 1. Create Product 1 (Electronics)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "Mechanical Keyboard",
+  "description": "RGB Backlit Blue Switch",
+  "price": 79.99,
+  "category": "Electronics"
+}
+
+### 2. Create Product 2 (Kitchen)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "Ceramic Coffee Mug",
+  "description": "350ml heat resistant ceramic mug",
+  "price": 14.50,
+  "category": "Kitchen"
+}
+
+### 3. Create Product 3 (Electronics)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "Wireless Mouse",
+  "description": "Ergonomic 2.4GHz optical mouse",
+  "price": 29.99,
+  "category": "Electronics"
+}
+
+### 4. Get All Products
+GET http://localhost:8080/api/products
+Accept: application/json
+
+### 5. Get Product By ID
+GET http://localhost:8080/api/products/1
+Accept: application/json
+
+### 6. Filter by Category
+GET http://localhost:8080/api/products/category/Electronics
+Accept: application/json
+
+### 7. Filter by Max Price (<= 50.0)
+GET http://localhost:8080/api/products/price/50.0
+Accept: application/json
+
+### 8. Search Products by Name (Case-Insensitive)
+GET http://localhost:8080/api/products/search?name=mouse
+Accept: application/json
+
+### 9. Update Product
+PUT http://localhost:8080/api/products/1
+Content-Type: application/json
+
+{
+  "name": "Mechanical Keyboard Pro",
+  "description": "RGB Backlit Silent Red Switch",
+  "price": 89.99,
+  "category": "Electronics"
+}
+
+### 10. Delete Product By ID
+DELETE http://localhost:8080/api/products/2
