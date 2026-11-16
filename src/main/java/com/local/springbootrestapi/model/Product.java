@@ -1,6 +1,10 @@
 package com.local.springbootrestapi.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table( name = "Products")
@@ -8,9 +12,21 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "name is required")
+    @Size(min = 5 , max = 50, message = "name need to be at least 5 chars and max 50")
     private String name;
+
+    @NotBlank(message = "description is required")
+    @Size(min = 5 , max = 100, message = "description need to be at least 5 chars and max 100")
     private String description;
+
+    @NotNull(message = "price is required")
+    @Positive(message = "price must be greater than zero")
     private Double price;
+
+    @NotBlank(message = "category is required")
+    @Size(min = 5 , max = 50, message = "category need to be at least 5 chars and max 50")
     private String category;
 
     public Product() {

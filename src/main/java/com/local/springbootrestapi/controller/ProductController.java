@@ -2,11 +2,17 @@ package com.local.springbootrestapi.controller;
 
 import com.local.springbootrestapi.model.Product;
 import com.local.springbootrestapi.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
@@ -54,7 +60,7 @@ public class ProductController {
 
     // add new product
     @PostMapping
-    public ResponseEntity<Product> addProduct(@RequestBody Product product)
+    public ResponseEntity<Product> addProduct(@Valid @RequestBody Product product)
     {
         Product newProduct = productService.saveProduct(product);
 
@@ -63,7 +69,7 @@ public class ProductController {
 
     // update a product
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product)
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id,@Valid @RequestBody Product product)
     {
         Product updateProduct = productService.getProductById(id) .orElseThrow(
                 ()-> new RuntimeException("Product not found")
@@ -90,6 +96,23 @@ public class ProductController {
         productService.deleteProduct(productToDelete);
         return ResponseEntity.ok("Product Deleted");
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String,String> handleValidationException(MethodArgumentNotValidException ex)
+    {
+        Map<String,String> errors = new HashMap<>();
+
+        ex.getBindingResult().getAllErrors().forEach(
+                (err) -> {
+                    String fieldName = ((FieldError) err).getField();
+                    String message = err.getDefaultMessage();
+                    errors.put(fieldName,message);
+                });
+        return errors;
+
+    }
+
 
 
 
