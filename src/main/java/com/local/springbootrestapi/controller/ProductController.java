@@ -1,5 +1,6 @@
 package com.local.springbootrestapi.controller;
 
+import com.local.springbootrestapi.exception.ResourceNotFoundException;
 import com.local.springbootrestapi.model.Product;
 import com.local.springbootrestapi.service.ProductService;
 import jakarta.validation.Valid;
@@ -35,7 +36,7 @@ public class ProductController {
     {
         Product product = productService.getProductById(id)
                 .orElseThrow(
-                        ()-> new RuntimeException("Product not found")
+                        ()-> new ResourceNotFoundException("Product not found")
                 );
         return ResponseEntity.ok(product);
     }
@@ -72,7 +73,7 @@ public class ProductController {
     public ResponseEntity<Product> updateProduct(@PathVariable Long id,@Valid @RequestBody Product product)
     {
         Product updateProduct = productService.getProductById(id) .orElseThrow(
-                ()-> new RuntimeException("Product not found")
+                ()-> new ResourceNotFoundException("Product not found")
         );
         // update product if it is existed
         updateProduct.setName(product.getName());
@@ -90,13 +91,14 @@ public class ProductController {
     public ResponseEntity<?> deleteProduct(@PathVariable Long id)
     {
         Product productToDelete = productService.getProductById(id) .orElseThrow(
-                ()-> new RuntimeException("Product not Found")
+                ()-> new ResourceNotFoundException("Product not Found")
         );
 
         productService.deleteProduct(productToDelete);
         return ResponseEntity.ok("Product Deleted");
     }
 
+    // handle input validation
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String,String> handleValidationException(MethodArgumentNotValidException ex)
